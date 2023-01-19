@@ -1,14 +1,88 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block head %}
+<script></script>
+{% endblock %} {% block body %}
+<center>
+  <form
+    id="image-upload"
+    action="/"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="file" name="file" />
+    <select id="fileFormat" name="fileFormat">
+      <option value="png">png</option>
+      <option value="jpeg">jpeg</option>
+      <option value="jpg">jpg</option>
+    </select>
+    <input
+      type="radio"
+      name="options"
+      value="remove_background"
+      id="remove_background"
+      checked
+    />
+    <label for="remove_background">Remove background</label>
+    <input
+      type="radio"
+      name="options"
+      value="change_background"
+      id="change_background"
+      
+    />
+    <label for="change_background">Change background</label>
+    <input
+      type="radio"
+      name="options"
+      value="solid_background"
+      id="solid_background"
+      
+    />
+    <label for="solid_background">Solid background</label>
+    <hr />
+    <input
+      type="color"
+      name="colorPicker"
+      id="colorPicker"
+      style="display: none"
+    />
+    <input
+      type="file"
+      name="background"
+      id="background"
+      style="display: none"
+    />
+    <input type="submit" value="Remove background" />
+  </form>
 
-{% block head %}
+  <script>
+    let options = document.getElementsByName("options");
+    let colorPicker = document.getElementById("colorPicker");
+    let background = document.getElementById("background");
+    for (let i = 0; i < options.length; i++) {
+      options[i].addEventListener("change", function () {
+        switch (this.value) {
+          case "remove_background":
+            background.style.display = "none";
+            colorPicker.style.display = "none";
+            break;
+          case "change_background":
+            background.style.display = "inline";
+            colorPicker.style.display = "none";
+            break;
+          case "solid_background":
+            background.style.display = "none";
+            colorPicker.style.display = "inline";
+            break;
+        }
+      });
+    }
+  </script>
 
-{% endblock %}
-
-{% block body %}
-
-<form action="/upload" method="post" enctype='multipart/form-data'>
-    <input type="file" name="file"/>
-    <input type="submit" value="Add Task"/>
-</form>
-
+  {% if src%}
+  <img src="{{src}}" id="my-image" height="500px" />
+  <a href="{{src}}" download>download</a>
+  {% endif %} {% if error %}
+  <p>{{error}}</p>
+  {% endif %}
+</center>
 {% endblock %}
